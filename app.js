@@ -5,7 +5,6 @@ const formData = require('form-data');
 const Mailgun = require('mailgun.js')
 require('dotenv').config();
 const DOMAIN = process.env.DOMAIN;
-const PORT = process.env.PORT;
 const functions = require('@google-cloud/functions-framework');
 const mailgun = new Mailgun(formData);
 const mg = mailgun.client({username: 'api',  key: process.env.MAILGUN_API_KEY });
@@ -15,7 +14,7 @@ functions.cloudEvent('sendVerificationEmail', async(cloudEvent) => {
     const payload = JSON.parse(Buffer.from(eventData, 'base64').toString());
     const { firstName, lastName, username } = payload;
     const verificationToken = uuid.v4();
-    const verificationUrl = `http://${DOMAIN}:${PORT}/v1/user/verify-email?token=${verificationToken}`;
+    const verificationUrl = `https://${DOMAIN}/v1/user/verify-email?token=${verificationToken}`;
     let emailStatus = 'Pending';
     let errorMessage = '';
     let response;
